@@ -4,22 +4,29 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Movement Settings")]
     public float moveSpeed = 5f;
     public float jumpForce = 7f;
     public float highJumpForce = 11f;
+
+    [Header("Jump Settings")]
+    public float doubleTapTime = 0.6f; // max delay between taps for high jump
+
+    [Header("References")]
+    public Transform target;
     private Rigidbody2D rb;
+    private Animator animator;
+
     private Vector2 moveInput;
     private bool canMove = true;
-    public Transform target;
-
-    // Jump handling
     private bool isGrounded = false;
     private float lastJumpTime = 0f;
-    public float doubleTapTime = 0.6f; // max delay between taps for high jump
+    private bool facingRight = true;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -28,10 +35,19 @@ public class PlayerMovement : MonoBehaviour
 
         // Movement Input
         moveInput.x = Input.GetAxisRaw("Horizontal");
-        moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput.Normalize();
 
-        // Jump logic
+        // --- Handle Facing Direction ---
+        if (moveInput.x > 0 && !facingRight)
+            Flip(true);
+        else if (moveInput.x < 0 && facingRight)
+            Flip(false);
+
+        // --- Update Walking Animation ---
+        if (animator != null)
+            animator.SetBool("walking", Mathf.Abs(moveInput.x) > 0.01f);
+
+        // --- Jump Logic ---
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (isGrounded)
@@ -39,13 +55,9 @@ public class PlayerMovement : MonoBehaviour
                 float timeSinceLastJump = Time.time - lastJumpTime;
 
                 if (timeSinceLastJump <= doubleTapTime)
-                {
                     HighJump();
-                }
                 else
-                {
                     Jump();
-                }
 
                 lastJumpTime = Time.time;
             }
@@ -67,33 +79,43 @@ public class PlayerMovement : MonoBehaviour
     private void Jump()
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-        Debug.Log("Normal Jump");
         isGrounded = false;
+
+        if (animator != null)
+            animator.SetTrigger("JumpTrigger");
+
+        Debug.Log("Normal Jump");
     }
 
     private void HighJump()
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, highJumpForce);
-        Debug.Log("High Jump");
         isGrounded = false;
+
+        if (animator != null)
+            animator.SetTrigger("JumpTrigger");
+
+        Debug.Log("High Jump");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // Basic ground check
-        if (collision.contacts.Length > 0)
+        if (collision.contacts.Length > 0 && collision.contacts[0].normal.y > 0.5f)
         {
-            if (collision.contacts[0].normal.y > 0.5f)
-            {
-                isGrounded = true;
-            }
+            isGrounded = true;
         }
     }
 
-    /// <summary>
-    /// Smoothly moves the player to a target Transform within 1 second.
-    /// Player movement is disabled during this motion.
-    /// </summary>
+    private void Flip(bool faceRight)
+    {
+        facingRight = faceRight;
+        Vector3 scale = transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * (faceRight ? 1 : -1);
+        transform.localScale = scale;
+    }
+
+    // Smooth move override function
     public void TreeOverride()
     {
         StartCoroutine(MoveToTarget());
