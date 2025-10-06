@@ -71,6 +71,7 @@ public class PlayerInventory : MonoBehaviour
         }
     }
 
+
     // --- Button click functions ---
     public void OnButton1Click() => TrySelectColor(ColorToName(image1.color));
     public void OnButton2Click() => TrySelectColor(ColorToName(image2.color));
@@ -100,9 +101,56 @@ public class PlayerInventory : MonoBehaviour
             Debug.Log($"{color} not found in bag.");
         }
     }
+    public void RemoveSelectedColor1()
+    {
+        if (selected.Count > 0)
+        {
+            string col = selected[0];
+            selected.RemoveAt(0);
+            if (bag.Count < maxBagSize)
+            {
+                bag.Add(col);
+                Debug.Log($"{col} moved back to bag. Bag: {string.Join(", ", bag)} | Selected: {string.Join(", ", selected)}");
+            }
+            else
+            {
+                Debug.Log("Bag is full! Cannot move selected color back.");
+                // If bag is full, we can choose to drop the color or keep it in selected.
+                // Here we just log and do not add back to bag.
+            }
+        }
+        else
+        {
+            Debug.Log("No colors to deselect!");
+        }
 
+    }
+    public void RemoveSelectedColor2()
+    {
+        if (selected.Count > 1)
+        {
+            string col = selected[1];
+            selected.RemoveAt(1);
+            if (bag.Count < maxBagSize)
+            {
+                bag.Add(col);
+                Debug.Log($"{col} moved back to bag. Bag: {string.Join(", ", bag)} | Selected: {string.Join(", ", selected)}");
+            }
+            else
+            {
+                Debug.Log("Bag is full! Cannot move selected color back.");
+                // If bag is full, we can choose to drop the color or keep it in selected.
+                // Here we just log and do not add back to bag.
+            }
+        }
+        else
+        {
+            Debug.Log("No second color to deselect!");
+        }
+
+    }
     // Six color-specific wrappers
-    public void RemoveRed()    => RemoveColorFromBag("Red");
+    public void RemoveRed() => RemoveColorFromBag("Red");
     public void RemoveBlue()   => RemoveColorFromBag("Blue");
     public void RemoveYellow() => RemoveColorFromBag("Yellow");
     public void RemoveGreen()  => RemoveColorFromBag("Green");

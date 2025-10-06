@@ -1772,8 +1772,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 753981223}
         m_TargetAssemblyTypeName: PlayerInventory, Assembly-CSharp
-        m_MethodName: OnClickSelectionSprite
-        m_Mode: 3
+        m_MethodName: RemoveSelectedColor1
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3760,8 +3760,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 753981223}
         m_TargetAssemblyTypeName: PlayerInventory, Assembly-CSharp
-        m_MethodName: OnClickSelectionSprite
-        m_Mode: 3
+        m_MethodName: RemoveSelectedColor2
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
