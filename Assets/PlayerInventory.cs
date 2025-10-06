@@ -24,7 +24,7 @@ public class PlayerInventory : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         string tag = other.tag;
-        if (IsValidColorTag(tag))
+        if (IsValidColorTag(tag)&& bag.Count < maxBagSize)
         {
             AddToBag(tag);
             Destroy(other.gameObject);
