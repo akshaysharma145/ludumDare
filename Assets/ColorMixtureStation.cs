@@ -5,47 +5,40 @@ using TMPro;
 
 public class ColorMixtureStation : MonoBehaviour
 {
-    [Header("UI Elements")]
-    public TMP_Text floatingText;         // Text to show when near
-    public Button mixButton;          // Mix button
-    public Transform spawnPoint;      // Where new color box will appear (optional)
-    public GameObject Sprite1,Sprite2;
+    public GameObject Sprit1, Sprit2;
     public PlayerInventory playerInventory; // Reference to player's inventory (set when player enters)
 
     [HideInInspector] public bool playerNearby = false;
 
-    void Start()
+    public void Mixture()
     {
-        if (floatingText != null) floatingText.gameObject.SetActive(false);
-        Sprite1.SetActive(false);
-        Sprite2.SetActive(false);
-        if (mixButton != null)
+        if (playerInventory == null)
         {
-            mixButton.gameObject.SetActive(false);
-            //mixButton.onClick.AddListener(MixColors);
+            Debug.LogWarning("PlayerInventory is not assigned!");
+            return;
         }
-    }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (!other.CompareTag("Player")) return;
+        Debug.Log("Mixing colors at station");
 
         playerNearby = true;
-        if (floatingText != null) floatingText.gameObject.SetActive(true);
-        Sprite1.SetActive(true);
-        Sprite2.SetActive(true);
+        Sprit2.SetActive(true);
+        Sprit1.SetActive(false);
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    public void Close()
     {
-        if (!other.CompareTag("Player")) return;
+        if (playerInventory == null)
+        {
+            Debug.LogWarning("PlayerInventory is not assigned!");
+            return;
+        }
+
+        Debug.Log("Closing mixture station");
 
         playerNearby = false;
-        if (floatingText != null) floatingText.gameObject.SetActive(false);
-        if (mixButton != null) mixButton.gameObject.SetActive(false);
-        Sprite1.SetActive(false);
-        Sprite2.SetActive(false);
+        Sprit1.SetActive(true);
+        Sprit2.SetActive(false);
+
         playerInventory.Deselect();
     }
-
 }
