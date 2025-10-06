@@ -84,7 +84,36 @@ public class PlayerInventory : MonoBehaviour
     public void OnButton3Click() => TrySelectColor(ColorToName(image3.color));
     public void OnButton4Click() => TrySelectColor(ColorToName(image4.color));
     public void OnButton5Click() => TrySelectColor(ColorToName(image5.color));
-
+    public void buy1()
+    {
+        if (motes < 2)
+        {
+            Debug.Log("Not enough motes to buy color!");
+            return;
+        }
+        bag.Add("Red");
+        motes -= 2;
+    }
+    public void buy2()
+    {
+        if (motes < 2)
+        {
+            Debug.Log("Not enough motes to buy color!");
+            return;
+        }
+        bag.Add("Blue");
+        motes -= 2;
+    }
+    public void buy3()
+    {
+        if (motes < 2)
+        {
+            Debug.Log("Not enough motes to buy color!");
+            return;
+        }
+        bag.Add("Yellow");
+        motes -= 2;
+    }
     private string ColorToName(Color color)
     {
         if (color == Color.red) return "Red";
