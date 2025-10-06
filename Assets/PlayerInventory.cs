@@ -49,10 +49,53 @@ public class PlayerInventory : MonoBehaviour
             Debug.Log("Bag is full!");
         }
     }
+    [SerializeField] private GameObject redPrefab;
+    [SerializeField] private GameObject bluePrefab;
+    [SerializeField] private GameObject yellowPrefab;
+    [SerializeField] private GameObject greenPrefab;
+    [SerializeField] private GameObject orangePrefab;
+    [SerializeField] private GameObject violetPrefab;
+
+    private void SpawnColorPrefab(string color, Vector3 position)
+    {
+        GameObject prefabToSpawn = null;
+
+        switch (color)
+        {
+            case "Red":
+                prefabToSpawn = redPrefab;
+                break;
+            case "Blue":
+                prefabToSpawn = bluePrefab;
+                break;
+            case "Yellow":
+                prefabToSpawn = yellowPrefab;
+                break;
+            case "Green":
+                prefabToSpawn = greenPrefab;
+                break;
+            case "Orange":
+                prefabToSpawn = orangePrefab;
+                break;
+            case "Violet":
+                prefabToSpawn = violetPrefab;
+                break;
+        }
+
+        if (prefabToSpawn != null)
+        {
+            Instantiate(prefabToSpawn, position, Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogWarning($"No prefab assigned for color: {color}");
+        }
+    }
+
 
     private void TrySelectColor(string color)
     {
-        if (bag.Contains(color)&& (color == "Red" || color == "Yellow" || color == "Blue")&& mixtureStation != null && mixtureStation.playerNearby)
+        if (bag.Contains(color) && (color == "Red" || color == "Yellow" || color == "Blue") && mixtureStation != null && mixtureStation.playerNearby)
         {
             if (selected.Count < maxSelectedSize)
             {
@@ -67,7 +110,8 @@ public class PlayerInventory : MonoBehaviour
         }
         else
         {
-            Debug.Log($"{color} not in bag.");
+            bag.Remove(color);
+            SpawnColorPrefab(color, transform.position + Vector3.right * 2f);
         }
     }
 

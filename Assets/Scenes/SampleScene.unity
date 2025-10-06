@@ -2430,6 +2430,12 @@ MonoBehaviour:
   - {fileID: 640258785}
   - {fileID: 1895569035}
   mixButton: {fileID: 1862446503}
+  redPrefab: {fileID: 6568240395735389267, guid: 2b274c9777f7216438db67a39d9d6835, type: 3}
+  bluePrefab: {fileID: 6027448125679547914, guid: 3dc88fb2ddf32ba4d9d51e2fd7a84462, type: 3}
+  yellowPrefab: {fileID: 8013330889293515068, guid: 271769a0b6a9cb44c87501bcc746c213, type: 3}
+  greenPrefab: {fileID: 2753712553666215216, guid: e0b6fc35392bb854fa9b7ade9aa03270, type: 3}
+  orangePrefab: {fileID: 7085009262850902746, guid: fac1c0ab1eaef3d4f9b4a23108529e8f, type: 3}
+  violetPrefab: {fileID: 6536561378405864504, guid: 97901bf7b729290408c53f2f2203eac5, type: 3}
 --- !u!61 &753981224
 BoxCollider2D:
   m_ObjectHideFlags: 0
