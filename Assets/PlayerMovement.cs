@@ -5,10 +5,17 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
+    public float jumpForce = 7f;
+    public float highJumpForce = 11f;
     private Rigidbody2D rb;
     private Vector2 moveInput;
-    private bool canMove = true;   // Movement lock flag
+    private bool canMove = true;
     public Transform target;
+
+    // Jump handling
+    private bool isGrounded = false;
+    private float lastJumpTime = 0f;
+    public float doubleTapTime = 0.6f; // max delay between taps for high jump
 
     void Start()
     {
@@ -17,23 +24,69 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (!canMove) return;  // block motion during override
+        if (!canMove) return;
 
-        // Works with both input systems
+        // Movement Input
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput.Normalize();
+
+        // Jump logic
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (isGrounded)
+            {
+                float timeSinceLastJump = Time.time - lastJumpTime;
+
+                if (timeSinceLastJump <= doubleTapTime)
+                {
+                    HighJump();
+                }
+                else
+                {
+                    Jump();
+                }
+
+                lastJumpTime = Time.time;
+            }
+        }
     }
 
     void FixedUpdate()
     {
         if (canMove)
         {
-            rb.linearVelocity = moveInput * moveSpeed;
+            rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
         }
         else
         {
-            rb.linearVelocity = Vector2.zero; // stop motion when locked
+            rb.linearVelocity = Vector2.zero;
+        }
+    }
+
+    private void Jump()
+    {
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        Debug.Log("Normal Jump");
+        isGrounded = false;
+    }
+
+    private void HighJump()
+    {
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, highJumpForce);
+        Debug.Log("High Jump");
+        isGrounded = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Basic ground check
+        if (collision.contacts.Length > 0)
+        {
+            if (collision.contacts[0].normal.y > 0.5f)
+            {
+                isGrounded = true;
+            }
         }
     }
 
@@ -54,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
             yield break;
         }
 
-        canMove = false; // disable player control
+        canMove = false;
 
         Vector3 startPos = transform.position;
         Vector3 endPos = target.position;
@@ -68,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
 
-        transform.position = endPos; // ensure final position exact
-        canMove = true; // re-enable player control
+        transform.position = endPos;
+        canMove = true;
     }
 }

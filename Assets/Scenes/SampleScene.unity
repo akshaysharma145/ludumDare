@@ -2399,7 +2399,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 5
+  jumpForce: 14
+  highJumpForce: 20
   target: {fileID: 1619886749}
+  doubleTapTime: 0.9
 --- !u!114 &753981223
 MonoBehaviour:
   m_ObjectHideFlags: 0
